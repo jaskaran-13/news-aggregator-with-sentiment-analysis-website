@@ -16,6 +16,27 @@ main {
     padding: 20px;
 }
 
+#category-section {
+    margin-bottom: 20px;
+}
+
+#category {
+    padding: 8px;
+    margin-right: 10px;
+}
+
+#filter-button {
+    padding: 8px 12px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+#filter-button:hover {
+    background-color: #45a049;
+}
+
 #sentiment-section {
     margin-top: 20px;
 }
