@@ -1,3 +1,5 @@
+require('dotenv').config();  // Load environment variables from the .env file
+
 const fetchAPIData = async (url, method = 'GET', body = null) => {
     const options = {
         method,
@@ -48,16 +50,26 @@ const analyzeSentiment = async (text) => {
         const response = await fetch(url, {
             method: 'POST',
             headers: {
-                'x-textrazor-key': textRazorAPIKey,
+                'x-textrazor-key': process.env.TEXTRAZOR_API_KEY,  // Use the environment variable
                 'Content-Type': 'application/x-www-form-urlencoded',
             },
             body: new URLSearchParams(data),
         });
 
+        if (!response.ok) {
+            throw new Error('TextRazor API error: ' + response.statusText);
+        }
+
         const result = await response.json();
-        return result.response.sentiment; // Return sentiment result
+
+        if (result.response && result.response.sentiment) {
+            return result.response.sentiment;
+        } else {
+            throw new Error('Sentiment analysis result not available');
+        }
     } catch (error) {
-        return 'Error in sentiment analysis'; // Handle any errors
+        console.error('Sentiment analysis error:', error);  // Log detailed error
+        return `Error: ${error.message}`;  // Return the error message to the UI
     }
 };
 
