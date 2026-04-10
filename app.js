@@ -1,6 +1,7 @@
-const newsAPIKey = '8905031f3526440990ef80d776a9e770'; 
+const newsAPIKey = '8905031f3526440990ef80d776a9e770'; // NewsAPI key
 
-const textRazorAPIKey = '1c230d59f14ecbb04c7fa56898dc09eda2e2bf64ef598978142de75d'; 
+const textRazorAPIKey = '1c230d59f14ecbb04c7fa56898dc09eda2e2bf64ef598978142de75d'; // TextRazor API key (your provided key)
+
 // Helper function to handle API requests
 const fetchAPIData = async (url, method = 'GET', body = null) => {
     const options = {
@@ -26,10 +27,17 @@ const fetchNews = async (category = 'general') => {
 
     try {
         const data = await fetchAPIData(url);
+        console.log(data);  // Log the response to see what's returned
+
         document.getElementById('loading').style.display = 'none'; // Hide loading
-        return data.articles;
+        if (data && data.articles) {
+            return data.articles;
+        } else {
+            throw new Error('No articles found.');
+        }
     } catch (error) {
         document.getElementById('loading').style.display = 'none'; // Hide loading
+        console.error('Error fetching news:', error);  // Log the error
         document.getElementById('news-section').innerHTML = `<p class="error">${error.message}</p>`;
         return [];
     }
@@ -43,7 +51,7 @@ const analyzeSentiment = async (text) => {
     };
 
     try {
-        const result = await fetchAPIData(url, 'POST', data, textRazorAPIKey);
+        const result = await fetchAPIData(url, 'POST', data);
         return result.response.sentiment; // Return the sentiment analysis result
     } catch (error) {
         return 'Error in sentiment analysis'; // In case of error
@@ -58,7 +66,7 @@ const displayNews = async (category) => {
 
     // Show message if no articles are found
     if (articles.length === 0) {
-        newsSection.innerHTML = '<p>No news available at the moment. Please try another category.</p>';
+        newsSection.innerHTML = '<p>No news found for this category. Please try another category or check back later.</p>';
         return;
     }
 
@@ -86,7 +94,7 @@ document.getElementById('filter-button').addEventListener('click', () => {
     const customCategory = document.getElementById('custom-category').value.trim();
 
     // If custom category is provided, use that, else use the selected one
-    const categoryToUse = customCategory || selectedCategory;
+    const categoryToUse = customCategory || selectedCategory || 'general';  // Use 'general' if no valid category
     displayNews(categoryToUse);
 });
 
