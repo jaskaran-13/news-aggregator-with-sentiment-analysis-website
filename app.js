@@ -61,7 +61,11 @@ const displayNews = async (category) => {
 // Handle category selection and button click
 document.getElementById('filter-button').addEventListener('click', () => {
     const selectedCategory = document.getElementById('category').value;
-    displayNews(selectedCategory);
+    const customCategory = document.getElementById('custom-category').value.trim();
+
+    // If custom category is provided, use that, else use the selected one
+    const categoryToUse = customCategory || selectedCategory;
+    displayNews(categoryToUse);
 });
 
 // Initial display with default category
