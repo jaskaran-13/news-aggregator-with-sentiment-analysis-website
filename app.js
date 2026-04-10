@@ -21,7 +21,7 @@ const fetchAPIData = async (url, method = 'GET', body = null) => {
 
 // Function to fetch news
 const fetchNews = async (category = 'general') => {
-    const url = `https://cors-anywhere.herokuapp.com/https://newsapi.org/v2/top-headlines?category=${category}&apiKey=${newsAPIKey}`;
+    const url = `https://thingproxy.freeboard.io/http://newsapi.org/v2/top-headlines?category=${category}&apiKey=${newsAPIKey}`;
     
     document.getElementById('loading').style.display = 'block'; // Show loading
 
