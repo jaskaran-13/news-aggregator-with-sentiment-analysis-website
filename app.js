@@ -33,31 +33,22 @@ const displayNews = async () => {
     const articles = await fetchNews();
     const newsSection = document.getElementById('news-section');
     
-    articles.forEach(article => {
+    // Loop through each article
+    articles.forEach(async (article) => {
+        const sentiment = await analyzeSentiment(article.title); // Get sentiment of article title
         const articleElement = document.createElement('div');
         articleElement.classList.add('article');
+        
         articleElement.innerHTML = `
             <h3>${article.title}</h3>
             <p>${article.description}</p>
             <a href="${article.url}" target="_blank">Read more</a>
+            <div class="sentiment">
+                <p>Sentiment: ${sentiment}</p>
+            </div>
         `;
         newsSection.appendChild(articleElement);
     });
-
-    displaySentiment(articles); // Call sentiment analysis
-};
-
-// Display sentiment for each article
-const displaySentiment = async (articles) => {
-    for (let article of articles) {
-        const sentiment = await analyzeSentiment(article.title);
-        const sentimentElement = document.createElement('div');
-        sentimentElement.classList.add('sentiment');
-        sentimentElement.innerHTML = `
-            <p>Sentiment: ${sentiment}</p>
-        `;
-        articleElement.appendChild(sentimentElement);
-    }
 };
 
 displayNews();
