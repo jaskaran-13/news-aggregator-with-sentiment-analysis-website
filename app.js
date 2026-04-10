@@ -1,8 +1,3 @@
-const newsAPIKey = '8905031f3526440990ef80d776a9e770'; // NewsAPI key
-
-const textRazorAPIKey = '1c230d59f14ecbb04c7fa56898dc09eda2e2bf64ef598978142de75d'; // TextRazor API key 
-
-// Helper function to handle API requests
 const fetchAPIData = async (url, method = 'GET', body = null) => {
     const options = {
         method,
@@ -19,24 +14,25 @@ const fetchAPIData = async (url, method = 'GET', body = null) => {
     return response.json();
 };
 
-// Function to fetch news
+// Function to fetch news from the backend proxy
 const fetchNews = async (category = 'general') => {
-    const url = `https://newsapi.org/v2/top-headlines?category=${category}&apiKey=${newsAPIKey}`;
-    
-    document.getElementById('loading').style.display = 'block'; // Show loading
+    const url = `/api/news?category=${category}`; // Call the backend serverless function
+
+    document.getElementById('loading').style.display = 'block'; // Show loading spinner
 
     try {
-        const data = await fetchAPIData(url);
-        console.log(data);  // Log the response to see what's returned
+        const data = await fetchAPIData(url);  // Fetch data from the backend proxy
+        console.log(data);  // Log the response to check what is returned
 
-        document.getElementById('loading').style.display = 'none'; // Hide loading
+        document.getElementById('loading').style.display = 'none'; // Hide loading spinner
+
         if (data && data.articles) {
-            return data.articles;
+            return data.articles;  // Return the articles data
         } else {
             throw new Error('No articles found.');
         }
     } catch (error) {
-        document.getElementById('loading').style.display = 'none'; // Hide loading
+        document.getElementById('loading').style.display = 'none'; // Hide loading spinner
         console.error('Error fetching news:', error);  // Log the error
         document.getElementById('news-section').innerHTML = `<p class="error">${error.message}</p>`;
         return [];
@@ -73,12 +69,12 @@ const displayNews = async (category) => {
 
     // Show message if no articles are found
     if (articles.length === 0) {
-        newsSection.innerHTML = '<p>No news found for this category. Please try another category or check back later.</p>';
+        newsSection.innerHTML = '<p class="no-results">No news found for this category. Please try another category or check back later.</p>';
         return;
     }
 
     // Loop through each article
-    articles.forEach(async (article) => {
+    for (const article of articles) {
         const sentiment = await analyzeSentiment(article.title); // Get sentiment of article title
         const articleElement = document.createElement('div');
         articleElement.classList.add('article');
@@ -92,7 +88,7 @@ const displayNews = async (category) => {
             </div>
         `;
         newsSection.appendChild(articleElement);
-    });
+    }
 };
 
 // Handle category selection and button click
