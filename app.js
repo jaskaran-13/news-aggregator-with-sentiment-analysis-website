@@ -1,4 +1,22 @@
-const newsAPIKey = '8905031f3526440990ef80d776a9e770'; // Replace with your actual key
+const newsAPIKey = '8905031f3526440990ef80d776a9e770'; 
+
+const textRazorAPIKey = '1c230d59f14ecbb04c7fa56898dc09eda2e2bf64ef598978142de75d'; 
+// Helper function to handle API requests
+const fetchAPIData = async (url, method = 'GET', body = null) => {
+    const options = {
+        method,
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    };
+    
+    if (body) {
+        options.body = JSON.stringify(body);
+    }
+
+    const response = await fetch(url, options);
+    return response.json();
+};
 
 // Function to fetch news
 const fetchNews = async (category = 'general') => {
@@ -7,11 +25,8 @@ const fetchNews = async (category = 'general') => {
     document.getElementById('loading').style.display = 'block'; // Show loading
 
     try {
-        const response = await fetch(url);
-        if (!response.ok) {
-            throw new Error('Failed to fetch news articles. Please try again later.');
-        }
-        const data = await response.json();
+        const data = await fetchAPIData(url);
+        document.getElementById('loading').style.display = 'none'; // Hide loading
         return data.articles;
     } catch (error) {
         document.getElementById('loading').style.display = 'none'; // Hide loading
@@ -20,7 +35,7 @@ const fetchNews = async (category = 'general') => {
     }
 };
 
-// Function to analyze sentiment of text
+// Function to analyze sentiment of text using TextRazor
 const analyzeSentiment = async (text) => {
     const url = 'https://api.textrazor.com';
     const data = {
@@ -28,23 +43,10 @@ const analyzeSentiment = async (text) => {
     };
 
     try {
-        const response = await fetch(url, {
-            method: 'POST',
-            headers: {
-                'x-textrazor-key': '1c230d59f14ecbb04c7fa56898dc09eda2e2bf64ef598978142de75d', // Replace with your actual key
-                'Content-Type': 'application/x-www-form-urlencoded',
-            },
-            body: new URLSearchParams(data),
-        });
-        
-        if (!response.ok) {
-            throw new Error('Sentiment analysis failed. Please try again later.');
-        }
-
-        const result = await response.json();
-        return result.response.sentiment;
+        const result = await fetchAPIData(url, 'POST', data, textRazorAPIKey);
+        return result.response.sentiment; // Return the sentiment analysis result
     } catch (error) {
-        return 'Error in sentiment analysis';
+        return 'Error in sentiment analysis'; // In case of error
     }
 };
 
@@ -54,9 +56,9 @@ const displayNews = async (category) => {
     const newsSection = document.getElementById('news-section');
     newsSection.innerHTML = '';  // Clear previous articles
 
-    // If no articles, show a message
+    // Show message if no articles are found
     if (articles.length === 0) {
-        newsSection.innerHTML = '<p>No news available at the moment.</p>';
+        newsSection.innerHTML = '<p>No news available at the moment. Please try another category.</p>';
         return;
     }
 
