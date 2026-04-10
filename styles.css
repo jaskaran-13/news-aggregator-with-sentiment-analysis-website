@@ -37,8 +37,20 @@ main {
     background-color: #45a049;
 }
 
+#loading {
+    text-align: center;
+    font-size: 18px;
+    color: #333;
+    display: none;
+}
+
 #sentiment-section {
     margin-top: 20px;
+}
+
+.sentiment {
+    font-weight: bold;
+    margin-top: 10px;
 }
 
 footer {

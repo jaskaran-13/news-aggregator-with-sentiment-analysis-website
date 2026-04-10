@@ -3,9 +3,14 @@ const newsAPIKey = '8905031f3526440990ef80d776a9e770'; // Replace with your actu
 // Function to fetch news
 const fetchNews = async (category = 'general') => {
     const url = `https://newsapi.org/v2/top-headlines?category=${category}&apiKey=${newsAPIKey}`;
+    
+    document.getElementById('loading').style.display = 'block'; // Show loading
 
     const response = await fetch(url);
     const data = await response.json();
+
+    document.getElementById('loading').style.display = 'none'; // Hide loading
+
     return data.articles;
 };
 
