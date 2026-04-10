@@ -1,10 +1,15 @@
+/* Base body styles */
 body {
     font-family: Arial, sans-serif;
     background-color: #f4f4f4;
     margin: 0;
     padding: 0;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;  /* Ensures the footer is at the bottom */
 }
 
+/* Header Styling */
 header {
     background-color: #333;
     color: white;
@@ -12,15 +17,19 @@ header {
     text-align: center;
 }
 
+/* Main Content Styling */
 main {
+    flex: 1;  /* Ensures the content area takes up available space */
     padding: 20px;
 }
 
+/* Category Section */
 #category-section {
     margin-bottom: 20px;
     text-align: center;
 }
 
+/* Input and Button Styling */
 #category, #custom-category, #filter-button {
     padding: 10px;
     font-size: 16px;
@@ -29,6 +38,7 @@ main {
     width: 250px;
 }
 
+/* Button Styling */
 #filter-button {
     background-color: #4CAF50;
     color: white;
@@ -40,6 +50,7 @@ main {
     background-color: #45a049;
 }
 
+/* Loading Indicator */
 #loading {
     text-align: center;
     font-size: 18px;
@@ -47,6 +58,7 @@ main {
     display: none;
 }
 
+/* News Section Grid */
 #news-section {
     display: flex;
     flex-wrap: wrap;
@@ -54,6 +66,7 @@ main {
     justify-content: center;
 }
 
+/* Article Styling */
 .article {
     background-color: #fff;
     padding: 15px;
@@ -63,6 +76,7 @@ main {
     margin-bottom: 20px;
 }
 
+/* Article Titles and Content */
 .article h3 {
     font-size: 18px;
     color: #333;
@@ -82,23 +96,26 @@ main {
     text-decoration: underline;
 }
 
+/* Sentiment Analysis Styling */
 .sentiment {
     font-weight: bold;
     margin-top: 10px;
     font-size: 14px;
 }
 
+/* Footer Styling */
 footer {
     background-color: #333;
     color: white;
     text-align: center;
     padding: 10px;
-    position: absolute;
+    position: relative;
     width: 100%;
     bottom: 0;
+    margin-top: auto;  /* Keeps footer at the bottom */
 }
 
-/* Responsive design for mobile */
+/* Responsive design for mobile devices */
 @media only screen and (max-width: 600px) {
     #category-section {
         display: flex;
