@@ -1,6 +1,6 @@
 const newsAPIKey = '8905031f3526440990ef80d776a9e770'; // NewsAPI key
 
-const textRazorAPIKey = '1c230d59f14ecbb04c7fa56898dc09eda2e2bf64ef598978142de75d'; // TextRazor API key (your provided key)
+const textRazorAPIKey = '1c230d59f14ecbb04c7fa56898dc09eda2e2bf64ef598978142de75d'; // TextRazor API key 
 
 // Helper function to handle API requests
 const fetchAPIData = async (url, method = 'GET', body = null) => {
@@ -21,7 +21,7 @@ const fetchAPIData = async (url, method = 'GET', body = null) => {
 
 // Function to fetch news
 const fetchNews = async (category = 'general') => {
-    const url = `https://newsapi.org/v2/top-headlines?category=${category}&apiKey=${newsAPIKey}`;
+    const url = `https://cors-anywhere.herokuapp.com/https://newsapi.org/v2/top-headlines?category=${category}&apiKey=${newsAPIKey}`;
     
     document.getElementById('loading').style.display = 'block'; // Show loading
 
@@ -45,16 +45,23 @@ const fetchNews = async (category = 'general') => {
 
 // Function to analyze sentiment of text using TextRazor
 const analyzeSentiment = async (text) => {
-    const url = 'https://api.textrazor.com';
-    const data = {
-        text: text,
-    };
+    const url = `https://cors-anywhere.herokuapp.com/https://api.textrazor.com/`;
+    const data = { text: text };
 
     try {
-        const result = await fetchAPIData(url, 'POST', data);
-        return result.response.sentiment; // Return the sentiment analysis result
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'x-textrazor-key': textRazorAPIKey,
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: new URLSearchParams(data),
+        });
+
+        const result = await response.json();
+        return result.response.sentiment; // Return sentiment result
     } catch (error) {
-        return 'Error in sentiment analysis'; // In case of error
+        return 'Error in sentiment analysis'; // Handle any errors
     }
 };
 
