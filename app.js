@@ -1,5 +1,3 @@
-require('dotenv').config();  // Load environment variables from the .env file
-
 const fetchAPIData = async (url, method = 'GET', body = null) => {
     const options = {
         method,
@@ -50,7 +48,7 @@ const analyzeSentiment = async (text) => {
         const response = await fetch(url, {
             method: 'POST',
             headers: {
-                'x-textrazor-key': process.env.TEXTRAZOR_API_KEY,  // Use the environment variable
+                'x-textrazor-key': process.env.TEXTRAZOR_API_KEY,  // Use environment variable directly
                 'Content-Type': 'application/x-www-form-urlencoded',
             },
             body: new URLSearchParams(data),
