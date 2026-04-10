@@ -40,34 +40,28 @@ const fetchNews = async (category = 'general') => {
 };
 
 // Function to analyze sentiment of text using TextRazor
+// Function to analyze sentiment of text using serverless function
 const analyzeSentiment = async (text) => {
-    const url = `https://api.textrazor.com/`;
-    const data = { text: text };
-
+    const url = '/api/sentiment'; // Pointing to the serverless function
+    
     try {
         const response = await fetch(url, {
             method: 'POST',
             headers: {
-                'x-textrazor-key': process.env.TEXTRAZOR_API_KEY,  // Use environment variable directly
-                'Content-Type': 'application/x-www-form-urlencoded',
+                'Content-Type': 'application/json',
             },
-            body: new URLSearchParams(data),
+            body: JSON.stringify({ text }), // Send the text to the serverless function
         });
 
         if (!response.ok) {
-            throw new Error('TextRazor API error: ' + response.statusText);
+            throw new Error('Error fetching sentiment data');
         }
 
         const result = await response.json();
-
-        if (result.response && result.response.sentiment) {
-            return result.response.sentiment;
-        } else {
-            throw new Error('Sentiment analysis result not available');
-        }
+        return result.sentiment; // Return sentiment result from the serverless function
     } catch (error) {
-        console.error('Sentiment analysis error:', error);  // Log detailed error
-        return `Error: ${error.message}`;  // Return the error message to the UI
+        console.error('Sentiment analysis error:', error);
+        return `Error: ${error.message}`; // Return the error message to the UI
     }
 };
 
